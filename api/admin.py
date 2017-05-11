@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Feed, Category, FeedItem
+
+admin.site.register(Feed)
+admin.site.register(FeedItem)
+admin.site.register(Category)
