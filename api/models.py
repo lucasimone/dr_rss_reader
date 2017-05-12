@@ -48,9 +48,9 @@ class Feed(models.Model):
     """
         Feed Model
     """
-    link = models.CharField(blank=True, max_length=450)
-    url = models.CharField(blank=True, max_length=450)
-    title = models.CharField(blank=True, null=True, max_length=250)
+    link    = models.CharField(blank=True, max_length=450)
+    url     = models.CharField(blank=True, max_length=450)
+    title   = models.CharField(blank=True, null=True, max_length=250)
 
     category = models.ForeignKey(Category, blank=True, null=True)
     user = models.ForeignKey(User, blank=True, null=True)

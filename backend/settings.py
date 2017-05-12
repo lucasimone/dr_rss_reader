@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import datetime
+
+
+CELERYBEAT_SCHEDULE = {
+    "feed-updates": {
+        "task": "update_all_feeds",
+        "schedule": datetime.timedelta(hours=1),
+        },
+    }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
