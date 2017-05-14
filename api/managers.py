@@ -12,8 +12,8 @@ from django.db.models import Manager
 
 
 class FeedItemQuerySet(QuerySet):
-    def my_feed_items(self, user):
-        return self.filter(feed__user=user)
+    def my_feed_items(self, owner):
+        return self.filter(feed__owner=owner)
 
     def category(self, category_slug):
         return self.filter(feed__category__slug=category_slug)
@@ -35,8 +35,8 @@ class FeedItemManager(Manager):
     def category(self, category_slug):
         return self.get_queryset().category(category_slug)
 
-    def my_feed_items(self, user):
-        return self.get_queryset().my_feed_items(user)
+    def my_feed_items(self, owner):
+        return self.get_queryset().my_feed_items(owner)
 
     def un_read(self):
         return self.get_queryset().un_read()

@@ -1,11 +1,77 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from rest_framework.test import APIClient
+from rest_framework import status
+from django.core.urlresolvers import reverse
 
 from .models import Feed, FeedItem, Category
 
 
+# Define this after the ModelTestCase
+class ViewTestCase(TestCase):
+    """Test suite for the api views."""
+
+    def setUp(self):
+        """Define the test client and other test variables."""
+        self.client = APIClient()
+        self.feed_data= {'url': 'http://rss.cnn.com/rss/cnn_topstories.rss'}
+        self.response = self.client.post(
+            reverse('create'),
+            self.feed_data,
+            format="json")
+
+    def test_api_can_create_a_feed(self):
+        """Test the api has feed creation capability."""
+        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+    def test_api_can_get_a_feed(self):
+        """Test the api can get a given Feed."""
+        feed = Feed.objects.get()
+        response = self.client.get(
+            reverse('details'),
+            kwargs={'pk': feed.id}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, feed)
+
+
+    def test_api_can_update_feed(self):
+        """Test the api can update a given bucketlist."""
+        change_feed = {'title': 'reuters changed title'}
+        res = self.client.put(
+            reverse('details', kwargs={'pk': change_feed.id}),
+            change_feed, format='json'
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+
+    def test_api_can_delete_feed(self):
+        """Test the api can delete a bucketlist."""
+        feed = Feed.objects.get()
+        response = self.client.delete(
+            reverse('details', kwargs={'id': feed.id}),
+            format='json',
+            follow=True)
+
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_api_can_get_a_feed(self):
+        """Test the api can get a given Feed."""
+        items = FeedItem.objects.get()
+        response = self.client.get(
+            reverse('details'),
+            kwargs={'pk': items.feed}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, items)
+
+
+
 class FeedModelTest(TestCase):
+
+    """This class defines the test suite for the bucketlist model."""
+
 
     def test_string_representation(self):
         entry = Feed(url="http://rss.cnn.com/rss/cnn_topstories.rss")
@@ -39,8 +105,8 @@ class FeedModelTest(TestCase):
         user2.save()
 
         feed_url = 'http://rss.cnn.com/rss/cnn_topstories.rss'
-        feed1 = Feed(user=user1, url=feed_url)
-        feed2 = Feed(user=user2, url=feed_url)
+        feed1 = Feed(owner=user1, url=feed_url)
+        feed2 = Feed(owner=user2, url=feed_url)
         try:
             feed1.save()
             feed2.save()
@@ -50,12 +116,11 @@ class FeedModelTest(TestCase):
         self.assertIsNotNone(feed1.pk)
         self.assertIsNotNone(feed2.pk)
 
-    def test_category(self):
+    def test_category_representation(self):
 
         cat = Category(name="CatA")
         cat.save()
         self.assertEqual(cat.name, str(cat))
-
 
     def test_category(self):
 
@@ -67,7 +132,7 @@ class FeedModelTest(TestCase):
         self.assertEqual(cat.name, str(cat))
 
         feed_url = 'http://rss.cnn.com/rss/cnn_topstories.rss'
-        feed1 = Feed(user=user1, url=feed_url, category=cat)
+        feed1 = Feed(owner=user1, url=feed_url, category=cat)
 
         self.assertEqual(feed1.category.name, str(cat))
 

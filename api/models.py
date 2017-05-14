@@ -9,7 +9,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 
-
 from .managers import FeedItemManager
 
 @python_2_unicode_compatible
@@ -19,7 +18,10 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=250, blank=True)
     slug = models.SlugField(blank=True, null=True, editable=False)
-    user = models.ForeignKey(User, blank=True, null=True)
+    #user = models.ForeignKey(User, blank=True, null=True)
+    tags = models.CharField(max_length=250, blank=True)
+
+    owner = models.ForeignKey('auth.User', related_name='category', on_delete=models.CASCADE)
 
     @property
     def get_unread_count(self):
@@ -27,10 +29,11 @@ class Category(models.Model):
         Fetch the unread count for a given category.
         :return:
         """
-        return FeedItem.objects.my_feed_items(self.user).category(self.slug).un_read().count()
+        return FeedItem.objects.my_feed_items(self.owner).category(self.slug).un_read().count()
 
     def __str__(self):
         return self.name
+
 
     def save(self, *args, **kwargs):
         """
@@ -52,14 +55,16 @@ class Feed(models.Model):
     url     = models.CharField(blank=True, max_length=450)
     title   = models.CharField(blank=True, null=True, max_length=250)
 
+
     category = models.ForeignKey(Category, blank=True, null=True)
-    user = models.ForeignKey(User, blank=True, null=True)
+
+    owner = models.ForeignKey('auth.User', related_name='feeds', on_delete=models.CASCADE)
 
     last_update = models.DateField(blank=True, null=True, editable=False)
 
     class Meta:
         unique_together = (
-            ("url", "user"),
+            ("url", "owner"),
         )
 
     def __str__(self):
@@ -73,6 +78,7 @@ class Feed(models.Model):
         parser = feedparser.parse(self.url)
         return parser.feed.title
 
+
     def save(self, *args, **kwargs):
         """
         Updated .save() method.  Fetches the title
@@ -81,8 +87,10 @@ class Feed(models.Model):
         :param kwargs:
         :return:
         """
+
         if not self.title:
             self.title = self._get_title()
+
         super(Feed, self).save(*args, **kwargs)
         if self.last_update is None:
             self.update(force=True)
@@ -166,13 +174,13 @@ class Feed(models.Model):
             self._update_processor()
             return True
 
-    @models.permalink
-    def get_absolute_url(self):
-        """
-        Feed permalink
-        :return:
-        """
-        return ('feedme-feed-list-by-feed', (), {'feed_id': self.id})
+    # @models.permalink
+    # def get_absolute_url(self):
+    #     """
+    #     Feed permalink
+    #     :return:
+    #     """
+    #     return ('feedme-feed-list-by-feed', (), {'feed_id': self.id})
 
 
 @python_2_unicode_compatible
