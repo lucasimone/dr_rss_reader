@@ -1,0 +1,11 @@
+---
+machine:
+  timezone: Europe/Luxembourg
+  python:
+    version: 3.5.1
+
+test:
+  override:
+    - coverage run manage.py test
+  post:
+    - coverage html -d $CIRCLE_ARTIFACTS
