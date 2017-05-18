@@ -1,0 +1,19 @@
+---
+machine:
+  timezone: Europe/Luxembourg
+  python:
+    version: 3.5.1
+
+general:
+  build_dir: django
+
+
+#test:
+#  override:
+#    - coverage run manage.py test
+#  post:
+#    - coverage html -d $CIRCLE_ARTIFACTS
+
+test:
+  override:
+    - python manage.py test
