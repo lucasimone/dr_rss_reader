@@ -15,4 +15,4 @@ machine:
 
 test:
   override:
-    - python ./django/manage.py test
+    - python manage.py test
