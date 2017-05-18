@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
+from django.views import generic
 
 
 urlpatterns = [
     url(r'^api/',       include('api.urls')),
     url(r'^api-auth/',  include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^',           generic.TemplateView.as_view(template_name='index.html')),
     url(r'^admin/',     admin.site.urls),
 ]

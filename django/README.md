@@ -1,22 +1,10 @@
-DR. RSS Reader
------------------
+# DR. RSS Reader - DJANGO Section
 
-My RSS Reader implementation developed using Django (Python3) and React (JS).
+In this section there are all the details about DJANGO
 
 ## Prerequisites
+- Python
 
-- Python3
-- pip3
-
-
-## Installation 
-
-```bash
-sudo pip3 install -r requirements.txt
-python3 manage.py migrate
-python3 manage.py runserver
-
-```
 
 
 
