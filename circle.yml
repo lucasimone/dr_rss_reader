@@ -4,6 +4,12 @@ machine:
   python:
     version: 3.5.1
 
+
+dependencies:
+  override:
+    - npm install
+
+
 #test:
 #  override:
 #    - coverage run manage.py test
@@ -12,4 +18,4 @@ machine:
 
 test:
   override:
-    - python manage.py test
+    - python ./django/manage.py test
