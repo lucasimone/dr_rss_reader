@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load render_bundle from webpack_loader %}
+
 
 {% block main %}
 <div class="jumbotron text-center">
@@ -6,8 +8,13 @@
     <p> My first Django+React RSS Reader</p>
 </div>
 
-git<div class="container">
-  <div class="row">
+
+<div id="App1"></div>
+{% render_bundle 'vendors' %}
+{% render_bundle 'App1' %}
+
+
+<div class="row">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisci elit,
         sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
