@@ -34,7 +34,7 @@ SECRET_KEY = '*hs+^yisr2n3r@00v)=bfnegts)4m99*@-+#x)loj5%(r6t0u*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,10 +55,11 @@ INSTALLED_APPS = [
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Tell nose to measure coverage on the 'foo' and 'bar' apps
+# Tell nose to measure coverage on the 'api'
 NOSE_ARGS = [
     '--with-coverage',
-    '--cover-package=foo,bar',
+    '--cover-package=api'
+
 ]
 
 MIDDLEWARE = [
