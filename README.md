@@ -2,44 +2,24 @@
 
 This repository contains my first implementation of a webapp combining together DJANGO and REACTJS.
 
-The goal is to create a simple RSS Reader where the API are implemented using DJANGO Restfull framework and
-ReactJS will provide the View implementation.
+The goal is to create a simple RSS Reader where the API are implemented using DJANGO Restfull framework and ReactJS will provide the View implementation.
+
+[![build status](https://circleci.com/gh/lucasimone/dr_rss_reader.png?style=shield&circle-token=:813bdbe556e8318483173efaafd93af78a798c95)](https://circleci.com/gh/lucasimone/dr_rss_reader)
 
 
-[![Circle CI](https://circleci.com/gh/lucasimone/dr_rss_reader.png?circle-token=:813bdbe556e8318483173efaafd93af78a798c95)]
-(https://circleci.com/gh/lucasimone/dr_rss_reader)
+# Installation
 
-# Try this on your machine
 
- - Step0: Clone the repository
 
 ```bash
 git clone https://github.com/lucasimone/dr_rss_reader.git
 cd dr_rss_reader/django
-```
-
- - Step1: create your virtualenv (optional)
- If you have never seen this mkvirtualenv command, give a look at the  [documentation here](http://virtualenvwrapper.readthedocs.org/en/latest/) first.
-
-
-```bash
- mkvirtualenv rssreader
-```
-
- - Step2: install required dependencies for python and setup nodejs
-```bash
+mkvirtualenv rssreader
 pip install -r ./django/requirements.txt
 npm install
-```
 
-- Step3: setup DB (development)
-```bash
+# Setup Django DB
 ./django/manage.py migrate
-```
-
-
-- Step3 Start Django & NodeJS
-```bash
 ./django/manage.py runserver
 
 # in another terminal:
@@ -47,4 +27,4 @@ node server.js
 ```
 
 
-# License
+s
