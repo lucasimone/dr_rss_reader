@@ -4,11 +4,7 @@ machine:
   python:
     version: 3.5.1
 
-l
-dependencies:
-  override:
-    - pip install -r ./django/requirements.txt
-    - npm instal
+
 
 
 #test:
