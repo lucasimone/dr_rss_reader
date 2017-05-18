@@ -24,7 +24,7 @@ cd dr_rss_reader/django
 
  - Step2: install required dependencies for python and setup nodejs
 ```bash
-pip install -r requirements.txt
+pip install -r ./django/requirements.txt
 npm install
 ```
 
