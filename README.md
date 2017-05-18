@@ -5,6 +5,10 @@ This repository contains my first implementation of a webapp combining together 
 The goal is to create a simple RSS Reader where the API are implemented using DJANGO Restfull framework and
 ReactJS will provide the View implementation.
 
+
+[![Circle CI](https://circleci.com/gh/lucasimone/dr_rss_reader.png?circle-token=:813bdbe556e8318483173efaafd93af78a798c95)]
+(https://circleci.com/gh/lucasimone/dr_rss_reader)
+
 # Try this on your machine
 
  - Step0: Clone the repository
