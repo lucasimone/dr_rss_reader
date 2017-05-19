@@ -1,15 +1,18 @@
-import React from "react"
+import React, {Component} from "react"
+
 
 import Headline from "../components/Headline"
 import Paragraph from "../components/Paragraph"
 
-export default class App1Container extends React.Component {
+class App1Container extends Component {
   render() {
     return (
-      <div>
-          <Headline>DR RSS Reader</Headline>
-          <Paragraph>My first Django+React RSS Reader</Paragraph>
+      <div className="jumbotron text-center">
+          <Headline>D+Reader</Headline>
+          <Paragraph>A <strong>D</strong>jango+<strong>R</strong>eact RSS <strong>Reader</strong></Paragraph>
       </div>
     )
   }
 }
+
+export default App1Container

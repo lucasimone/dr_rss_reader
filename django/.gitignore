@@ -157,3 +157,5 @@ typings/
 ../.coverage
 ../.idea
 db.sqlite3
+
+dr_rss_reader/static/bundles
