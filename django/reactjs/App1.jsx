@@ -1,9 +1,11 @@
-import React from "react"
+import React, {Component} from "react"
+
 import { render } from "react-dom"
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
 
 import App1Container from "./containers/App1Container"
 
-class App1 extends React.Component {
+class RssFeedMainPage extends Component {
   render() {
     return (
       <App1Container />
@@ -11,4 +13,9 @@ class App1 extends React.Component {
   }
 }
 
-render(<App1/>, document.getElementById('App1'))
+render((
+   <Router history={hashHistory}>
+    <Route path="/" component={RssFeedMainPage}/>
+  </Router>
+
+), document.getElementById('root'))

@@ -8,70 +8,69 @@ from rest_framework.authtoken.models import Token
 from .models import Feed, FeedItem, Category
 
 
-# # Define this after the ModelTestCase
-# class ViewTestCase(TestCase):
-#     """Test suite for the api views."""
-#
-#     def setUp(self):
-#         self.user = User.objects.create_user('testuser', email='testuser@test.com', password='testing')
-#         self.user.save()
-#         self.factory = APIRequestFactory()
-#         self.client = APIClient()
-#         self.client.force_authenticate(user=self.user)
-#
-#
-#     def test_create_feed_api(self):
-#         self.feed_data = {'url': 'http://rss.cnn.com/rss/cnn_topstories.rss'}
-#         self.response = self.client.post(
-#             reverse('feed-list'),
-#             self.feed_data,
-#             format="json")
-#
-#
-#     def test_api_can_create_a_feed(self):
-#         """Test the api has feed creation capability."""
-#         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
-#
-#     def test_api_can_get_a_feed(self):
-#         """Test the api can get a given Feed."""
-#         feed = Feed.objects.get()
-#         response = self.client.get(
-#             reverse('details'),
-#             kwargs={'pk': feed.id}, format="json")
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertContains(response, feed)
-#
-#
-#     def test_api_can_update_feed(self):
-#         """Test the api can update a given bucketlist."""
-#         change_feed = {'title': 'reuters changed title'}
-#         res = self.client.put(
-#             reverse('details', kwargs={'pk': change_feed.id}),
-#             change_feed, format='json'
-#         )
-#         self.assertEqual(res.status_code, status.HTTP_200_OK)
-#
-#
-#     def test_api_can_delete_feed(self):
-#         """Test the api can delete a bucketlist."""
-#         feed = Feed.objects.get()
-#         response = self.client.delete(
-#             reverse('details', kwargs={'id': feed.id}),
-#             format='json',
-#             follow=True)
-#
-#         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
-#
-#     def test_api_can_get_a_feed(self):
-#         """Test the api can get a given Feed."""
-#         items = FeedItem.objects.get()
-#         response = self.client.get(
-#             reverse('details'),
-#             kwargs={'pk': items.feed}, format="json")
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertContains(response, items)
+
+# Define this after the ModelTestCase
+class ViewTestCase(TestCase):
+    """Test suite for the api views."""
+
+    def setUp(self):
+        self.response = None
+        self.user = User.objects.create_user('testuser', email='testuser@test.com', password='testing')
+        self.user.save()
+        self.factory = APIRequestFactory()
+        self.client = APIClient()
+        self.client.login(username=self.user.username, password=self.user.password)
+
+
+
+
+    # def test_create_feed_api(self):
+    #
+    #     self.assertEqual(self.user.username, 'testuser')
+    #     self.feed_data = {'url': 'http://rss.cnn.com/rss/cnn_topstories.rss'}
+    #
+    #     self.response = self.client.post(
+    #         reverse('feed-list'),
+    #         self.feed_data,
+    #         format="json")
+    #     self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+
+    def test_api_can_get_a_feed(self):
+        """Test the api can get a given Feed."""
+        for feed in Feed.objects.all():
+            self.response = self.client.get(
+                    reverse('item-list'),
+                    kwargs={'pk', feed.id},
+                    format="json")
+
+            self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+            self.assertNotEquals(self.response.body, "")
+
+
+
+    def test_api_can_update_feed(self):
+
+        for feed in Feed.objects.all():
+            change_feed = {'title': "UPDATED %s" %feed.title}
+            res = self.client.put(
+                reverse('detail', kwargs={'pk': feed.id}),
+                change_feed, format='json'
+            )
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+
+    def test_api_can_delete_feed(self):
+        """Test the api can delete a bucketlist."""
+        for feed in Feed.objects.all():
+            self.response = self.client.delete(
+                reverse('feed-detail', kwargs={'id': feed.id}),
+                format='json',
+                follow=True)
+
+            self.assertEquals(self.response.status_code, status.HTTP_204_NO_CONTENT)
+
+
 
 
 
