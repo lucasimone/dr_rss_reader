@@ -1,21 +1,51 @@
-import React, {Component} from "react"
+import React from "react"
 
+import {BrowserRouter as Router } from "react-router-dom"
 import { render } from "react-dom"
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
+import { Master} from  "./containers/Master"
+import { Provider } from "react-redux"
 
-import App1Container from "./containers/App1Container"
+/**  REDUX IMPORT **/
+import { createStore,
+         compose,
+         applyMiddleware,
+         combineReducers,} from "redux"
 
-class RssFeedMainPage extends Component {
-  render() {
+import thunk from "redux-thunk"
+import * as reducers from "./reducers"
+
+
+
+let finalCreateStore = compose(
+  applyMiddleware(thunk),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore)
+let reducer = combineReducers(reducers)
+let store = finalCreateStore(reducer)
+
+//let store = createStore(reducers)
+
+store.subscribe(() => {
+    console.log("Store updated", store.getState())
+})
+
+export class RssFeedMainPage extends React.Component {
+
+
+    render() {
+console.log("STORE STATE:::::")
+console.log(store.getState())
     return (
-      <App1Container />
+
+            <Router>
+                <Provider store={store}>
+                    <Master/>
+                </Provider>
+            </Router>
+
+
     )
   }
 }
 
-render((
-   <Router history={hashHistory}>
-    <Route path="/" component={RssFeedMainPage}/>
-  </Router>
-
-), document.getElementById('root'))
+render((<RssFeedMainPage/>), document.getElementById('root'))

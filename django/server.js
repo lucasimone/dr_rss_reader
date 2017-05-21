@@ -10,7 +10,10 @@ var config = require('./webpack.local.config')
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
+  headers: { "Access-Control-Allow-Origin": "*" },
   inline: true,
+  color: true,
+  progress: true,
   historyApiFallback: true,
 }).listen(3000, config.ip, function (err, result) {
   if (err) {

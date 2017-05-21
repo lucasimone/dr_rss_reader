@@ -26,5 +26,3 @@ npm install
 node server.js
 ```
 
-
-s
