@@ -6,25 +6,8 @@ import {LoginForm} from '../components/LoginForm';
 import {NavBar} from '../components/NavBar';
 export class Master extends React.Component {
 
-   constructor() {
-        super()
-        this.state = {
-            user: undefined,
-            isLoggedIn: false
-        }
-
-    }
-
-    onLogin(registeredUser){
-       console.log(registeredUser)
-       this.setState({
-           user: registeredUser
-       });
-       console.log("SET NEW USER :"+this.state.user)
-
-    }
-
     render() {
+
         return (<div>
             <NavBar username={this.props.user}/>
             <div className="container">
@@ -38,7 +21,7 @@ export class Master extends React.Component {
                         }/>
 
                         <Route path="/login" render={(props) => (
-                            <LoginForm {...props}  checkUser={this.onLogin.bind(this)}/>)
+                            <LoginForm {...props}/>)
                          }/>
 
             </Switch>
@@ -46,3 +29,4 @@ export class Master extends React.Component {
     );
   }
 }
+

@@ -1,37 +1,43 @@
 import React from "react"
-import { BrowserRouter as Router } from "react-router-dom"
 
-import { render } from      "react-dom"
-import { HeadLine } from    "./components/Headline"
-import { NavBar } from      "./components/NavBar"
-import { Master} from       "./containers/Master"
+import {BrowserRouter as Router } from "react-router-dom"
+import { render } from "react-dom"
+import { Master} from  "./containers/Master"
+import { Provider } from "react-redux"
 
-import styles from  "./App.css"
+/**  REDUX IMPORT **/
+import { createStore} from "redux"
 
-export default class RssFeedMainPage extends React.Component {
+import applyMiddleware from "redux"
+import reducers from "./reducers"
+
+// let finalCreateStore = compose(
+//   applyMiddleware(thunk),
+//   window.devToolsExtension ? window.devToolsExtension() : f => f)
+// (createStore)
+//let reducer = combineReducers(reducers)
 
 
+let store = createStore(reducers)
 
+store.subscribe(() => {
+    console.log("Store updated", store.getState())
+})
 
-    onLogin(registeredUser){
-       console.log(registeredUser)
-       this.setState({
-           user: registeredUser
-       });
-       console.log("SET NEW USER :"+this.state.user)
-
-    }
+export class RssFeedMainPage extends React.Component {
 
 
     render() {
-
+console.log("STORE STATE:::::")
+console.log(store.getState())
     return (
-        <Router>
-            <div>
 
-                <Master/>
-            </div>
-        </Router>
+            <Router>
+                <Provider store={store}>
+                    <Master/>
+                </Provider>
+            </Router>
+
 
     )
   }

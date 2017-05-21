@@ -13,18 +13,19 @@ import {
 from "react-bootstrap";
 
 
+
 export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
     <div className="container">
 
       <div className="col-md-offset-3 col-md-6 jumbotron text-center">
-          <h4>D+Reader Authentication.</h4>
+          <h3>D+Reader Login</h3>
           <p> </p>
           <Form onSubmit={props.handleSubmit}>
             {errorMessage && <Alert bsStyle="danger">{errorMessage}</Alert>}
             <FormGroup>
               <FormControl
                 type="text"
-                placeholder="Email"
+                placeholder="Username"
                 value={props.email}
                 onChange={props.handleEmailChange}
               />
@@ -54,7 +55,7 @@ export const LoginFormHtml = ({errorMessage, isLoggendIn,  ...props}) => (
     <div className="row">
         <div className="col-md-offset-5 col-md-3">
             <div className="form-login">
-            <h4>Welcome back.</h4>
+            <h>Welcome back.</h>
             <input type="text" id="userName" className="form-control input-sm chat-input" placeholder="username" />
             <br/>
             <input type="text" id="userPassword" className="form-control input-sm chat-input" placeholder="password" />
@@ -71,45 +72,66 @@ export const LoginFormHtml = ({errorMessage, isLoggendIn,  ...props}) => (
 
 );
 
+import { connect } from "react-redux"
+
+import * as auth from "../actions/authentication"
+
+
+@connect(state => ({ user: state.user }))
 export class LoginForm extends React.Component {
 
     constructor(props){
         super();
+
+        this.state = {
+                username : "Guest",
+                password : "",
+                isAuthenticated: false
+        };
     }
 
-    componentWillMount(){
-        this.setState({
-          email: "",
-          password: "",
-          isLoggingIn : false,
-          errorMessage : ""
 
-        });
+
+
+    componentWillUpdate(nextProps, nextState){
+         console.log("LoginForm Will Update ", nextProps, nextState)
+
+       let up = nextProps.user
+        console.log(up)
+       if (up === "undefined"){
+             console.log("No Profile Available")
+            return
+       }
+       if (up.isAuthenticated){
+            up.isAuthenticated = false
+            up.username = "Guest"
+            let {dispatch} = this.props;
+            dispatch(auth.logout());
+            this.props.history.push('/');
+
+        }
     }
+
 
     handleEmailChange(e) {
-        this.setState({ email: e.target.value });
+        this.setState({ username:  e.target.value});
     }
 
     handlePasswordChange(e) {
-        this.setState({ password: e.target.value });
+        this.setState({ password: e.target.value});
+
     }
 
     handleSubmit(e) {
 
         e.preventDefault();
-        this.setState({ isLoggingIn: true ,  email: this.state.email});
-        console.log( "User is "+  this.state.email)
-        this.props.checkUser(this.state.email)
+        this.setState({ isAuthenticated: true});
 
+        // SEND TO NAVBAR ...
+        let {dispatch} = this.props;
+        dispatch(auth.login(this.state.username, this.state.password))
         this.props.history.push('/');
 
-        // firebase
-        //   .auth()
-        //   .signInWithEmailAndPassword(this.state.email, this.state.password)
-        //   .catch(error => {
-        //     this.setState({ errorMessage: error.message, isLoggingIn: false });
-        //   });
 
 
     }

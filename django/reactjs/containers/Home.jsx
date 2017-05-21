@@ -1,17 +1,20 @@
 import React from "react";
 import PropTypes  from 'prop-types';
+import { connect } from 'react-redux'
 
 import {Sidebar} from "../components/Sidebar"
 import {FeedItem} from "../components/FeeItem"
 import {Footer} from "../components/Footer"
 import {HeadLine} from "../components/Headline"
+
+@connect(state => ({user: state.user }))
 export class Home extends React.Component{
 
     constructor(props) {
         super();
 
 
-        console.log("constructor")
+        console.log(props)
     }
 
     componentWillMount(){
@@ -24,6 +27,7 @@ export class Home extends React.Component{
 
      componentWillReceiveProps(nextProps){
         console.log("componentWillReceiveProps ", nextProps)
+         console.log(nextProps)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -47,13 +51,12 @@ export class Home extends React.Component{
 
 
     render (){
-
+        const user = this.props.user
         return (
             <div className="container">
 
-
                 <div className="row">
-
+                    <h1> Username : {user.username}</h1>
                     <div className="col-sm-3">
                        <HeadLine/>
                        <Sidebar/>
