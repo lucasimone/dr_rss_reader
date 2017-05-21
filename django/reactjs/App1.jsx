@@ -6,19 +6,24 @@ import { Master} from  "./containers/Master"
 import { Provider } from "react-redux"
 
 /**  REDUX IMPORT **/
-import { createStore} from "redux"
+import { createStore,
+         compose,
+         applyMiddleware,
+         combineReducers,} from "redux"
 
-import applyMiddleware from "redux"
-import reducers from "./reducers"
-
-// let finalCreateStore = compose(
-//   applyMiddleware(thunk),
-//   window.devToolsExtension ? window.devToolsExtension() : f => f)
-// (createStore)
-//let reducer = combineReducers(reducers)
+import thunk from "redux-thunk"
+import * as reducers from "./reducers"
 
 
-let store = createStore(reducers)
+
+let finalCreateStore = compose(
+  applyMiddleware(thunk),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore)
+let reducer = combineReducers(reducers)
+let store = finalCreateStore(reducer)
+
+//let store = createStore(reducers)
 
 store.subscribe(() => {
     console.log("Store updated", store.getState())

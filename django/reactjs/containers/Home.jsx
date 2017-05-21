@@ -3,26 +3,31 @@ import PropTypes  from 'prop-types';
 import { connect } from 'react-redux'
 
 import {Sidebar} from "../components/Sidebar"
-import {FeedItem} from "../components/FeeItem"
+import {NewsArea} from "../components/NewsArea"
 import {Footer} from "../components/Footer"
 import {HeadLine} from "../components/Headline"
 
-@connect(state => ({user: state.user }))
+import * as newsAction from "../actions/feedsAction"
+
+@connect(state => ({
+    user: state.user,
+    news: state.news,
+}))
 export class Home extends React.Component{
 
-    constructor(props) {
-        super();
 
-
-        console.log(props)
-    }
 
     componentWillMount(){
         console.log("componentWillMount")
     }
 
     componentDidMount(){
-        console.log("componentDidMount")
+        console.log("HOME componentDidMount")
+        let {dispatch, news} = this.props
+        if (!news.isLoadingRepos && news.feedItems === undefined) {
+              dispatch(newsAction.fetchFeedItems())
+        }
+
     }
 
      componentWillReceiveProps(nextProps){
@@ -47,16 +52,39 @@ export class Home extends React.Component{
         console.log("Compoment will unmount");
     }
 
-
+    renderLoading() {
+      return (
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
+              Loading...
+            </div>
+          </div>
+        </div>
+      )
+    }
 
 
     render (){
         const user = this.props.user
+
+        let {news} = this.props
+        let show_news
+        if (news.isLoadingRepos || news.feedItems === undefined) {
+            show_news = this.renderLoading()
+        }
+        else{
+            {
+                if (news.feedItems !== undefined)
+                    show_news =  <NewsArea news={news.feedItems}/>
+                else
+                    show_news = "<h1> No News ... </h1>"
+          }
+        }
         return (
             <div className="container">
 
                 <div className="row">
-                    <h1> Username : {user.username}</h1>
                     <div className="col-sm-3">
                        <HeadLine/>
                        <Sidebar/>
@@ -65,7 +93,7 @@ export class Home extends React.Component{
 
 
                        <div className="row">
-                            <FeedItem/> <FeedItem/> <FeedItem/> <FeedItem/> <FeedItem/> <FeedItem/> <FeedItem/>
+                           {show_news}
                        </div>
                     </div>
 

@@ -16,8 +16,12 @@ export class Master extends React.Component {
                             <Home {...props}/>
                         )}/>
 
-                        <Route path="/news"  render= { (props) =>
-                            (<h1> this are the news </h1>)
+                        <Route path="/feed"  render= { (props) =>
+                            (<h1> Feed Area soon available! </h1>)
+                        }/>
+
+                        <Route path="/register"  render= { (props) =>
+                            (<h1> Registration soon available! </h1>)
                         }/>
 
                         <Route path="/login" render={(props) => (

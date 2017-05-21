@@ -36,7 +36,7 @@ export class NavBar extends React.Component {
 
                             <ul className=" nav navbar-nav">
                                 <li><Link to="/"> Home </Link></li>
-                                <li><Link to="/news">News</Link></li>
+                                <li><Link to="/feed">Feed</Link></li>
                                 <li><a href="api/v1/">API</a></li>
                             </ul>
 
