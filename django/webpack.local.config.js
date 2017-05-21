@@ -5,6 +5,7 @@ var BundleTracker = require('webpack-bundle-tracker')
 var ip = 'localhost'
 var config = require('./webpack.base.config.js')
 
+var SRC_DIR = path.join(__dirname, "reactjs");
 
 config.devtool = "#eval-source-map"
 
@@ -31,7 +32,24 @@ config.plugins = config.plugins.concat([
 ])
 
 config.module.loaders.push(
-  { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['react-hot', 'babel'] }
+    {
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    loaders: ['react-hot', 'babel'],
+    include: SRC_DIR ,
+
+    },
+        {
+      test: /\.css$/,
+      loader: 'style-loader'
+    }, {
+      test: /\.css$/,
+      loader: 'css-loader',
+      query: {
+        modules: true,
+        localIdentName: '[name]__[local]___[hash:base64:5]'
+      }
+    }
 )
 
 module.exports = config

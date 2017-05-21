@@ -1,21 +1,40 @@
-import React, {Component} from "react"
+import React from "react"
+import { BrowserRouter as Router } from "react-router-dom"
 
-import { render } from "react-dom"
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
+import { render } from      "react-dom"
+import { HeadLine } from    "./components/Headline"
+import { NavBar } from      "./components/NavBar"
+import { Master} from       "./containers/Master"
 
-import App1Container from "./containers/App1Container"
+import styles from  "./App.css"
 
-class RssFeedMainPage extends Component {
-  render() {
+export default class RssFeedMainPage extends React.Component {
+
+
+
+
+    onLogin(registeredUser){
+       console.log(registeredUser)
+       this.setState({
+           user: registeredUser
+       });
+       console.log("SET NEW USER :"+this.state.user)
+
+    }
+
+
+    render() {
+
     return (
-      <App1Container />
+        <Router>
+            <div>
+
+                <Master/>
+            </div>
+        </Router>
+
     )
   }
 }
 
-render((
-   <Router history={hashHistory}>
-    <Route path="/" component={RssFeedMainPage}/>
-  </Router>
-
-), document.getElementById('root'))
+render((<RssFeedMainPage/>), document.getElementById('root'))
