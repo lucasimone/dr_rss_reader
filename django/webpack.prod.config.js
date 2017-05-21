@@ -1,12 +1,12 @@
 /**
  * Created by luca.lamorte on 19/05/2017.
  */
-
+var path = require("path")
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
 
 var config = require('./webpack.base.config.js')
-
+var SRC_DIR = path.join(__dirname, "reactjs");
 config.output.path = require('path').resolve('./dr_rss_reader/static/bundles/prod/')
 
 config.plugins = config.plugins.concat([
@@ -32,7 +32,24 @@ config.plugins = config.plugins.concat([
 
 // Add a loader for JSX files
 config.module.loaders.push(
-  { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel' }
+    {
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    loaders: ['react-hot', 'babel'],
+    include: SRC_DIR ,
+
+    },
+        {
+      test: /\.css$/,
+      loader: 'style-loader'
+    }, {
+      test: /\.css$/,
+      loader: 'css-loader',
+      query: {
+        modules: true,
+        localIdentName: '[name]__[local]___[hash:base64:5]'
+      }
+    }
 )
 
 module.exports = config
