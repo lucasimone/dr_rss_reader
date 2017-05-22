@@ -22,8 +22,8 @@ from django.views import generic
 urlpatterns = [
     url(r'^api/v1/',       include('api.urls')),
     url(r'^api-auth/',     include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^$',             generic.TemplateView.as_view(template_name='index.html')),
+    url(r'^$',         generic.TemplateView.as_view(template_name='index.html')),
     # match all other pages
-    url(r'^(?:.*)/?$', generic.TemplateView.as_view(template_name='index.html')),
+    url(r'^(?:.*)/?$',     generic.TemplateView.as_view(template_name='index.html')),
     url(r'^admin/',        admin.site.urls),
 ]

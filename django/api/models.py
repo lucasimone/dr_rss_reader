@@ -66,6 +66,7 @@ class Feed(models.Model):
         unique_together = (
             ("url", "owner"),
         )
+        ordering = ['last_update']
 
     def __str__(self):
         return self.url
@@ -77,6 +78,7 @@ class Feed(models.Model):
         """
         parser = feedparser.parse(self.url)
         return parser.feed.title
+
 
 
     def save(self, *args, **kwargs):
@@ -200,7 +202,7 @@ class FeedItem(models.Model):
     objects = FeedItemManager()
 
     class Meta:
-        ordering = ['id']
+        ordering = ['pub_date']
 
     def __str__(self):
         return self.title
