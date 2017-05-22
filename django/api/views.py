@@ -1,6 +1,6 @@
 import logging
 from rest_framework import generics
-from .serializers import FeedSerializer, FeedItemSerializer, UserSerializer, CategorySerializer
+from .serializers import FeedSerializer, FeedItemSerializer, UserSerializer, CategorySerializer, UserSerializer2
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -8,50 +8,18 @@ from django.contrib.auth.models import User, Group
 
 from .models import Feed, FeedItem, Category
 from rest_framework.decorators import api_view, detail_route
-from rest_framework import permissions
+from rest_framework import permissions, request
 from .permissions import IsOwnerOrReadOnly
-
-
+from rest_framework.decorators import list_route
+from rest_framework.permissions import AllowAny
 from rest_framework import renderers
+from .permissions import IsStaffOrTargetUser
 
 logger = logging.getLogger(__name__)
-
-
-# class CreateFeedView(generics.ListCreateAPIView):
-#     """This class defines the create behavior of our rest api."""
-#     queryset = Feed.objects.all()
-#     serializer_class = FeedSerializer
-#
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-#
-#     def perform_create(self, serializer):
-#         """Save the post data when creating a new bucketlist."""
-#         serializer.save(owner=self.request.user)
-#
-#
-# class DetailsFeedView(generics.RetrieveUpdateDestroyAPIView):
-#     """This class handles the http GET, PUT and DELETE requests."""
-#
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
-#
-#     queryset = Feed.objects.all()
-#     serializer_class = FeedSerializer
-#
-#
-#
-# class FeedViewSet(viewsets.ModelViewSet):
-#     queryset = Feed.objects.all()
-#     serializer_class = FeedSerializer
-#
-#
-# class FeedsHighlight(generics.GenericAPIView):
-#     queryset = Feed.objects.all()
-#     renderer_classes = (renderers.StaticHTMLRenderer,)
-#
-#     def get(self, request, *args, **kwargs):
-#         feed = self.get_object()
-#         return Response(feed.highlighted)
-
+logger.setLevel(logging.DEBUG)
+sh = logging.StreamHandler()
+sh.setLevel(logging.DEBUG)
+logger.addHandler(sh)
 
 class FeedViewSet(viewsets.ModelViewSet):
     """
@@ -60,6 +28,7 @@ class FeedViewSet(viewsets.ModelViewSet):
 
     Additionally we also provide an extra `highlight` action.
     """
+
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
@@ -68,6 +37,25 @@ class FeedViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
+    def get_queryset(self):
+        if "update" in self.request.GET :
+            logger.debug("UPDATE: %s" %self.request.GET['update'])
+            if self.request.GET['update']:
+                count = 0
+                for item in self.queryset:
+                    count += item._update_feed()
+
+                logger.debug('Updated feeds with {num} new entries'.format(num=count))
+            else:
+                logger.debug('No Update required!')
+        else:
+            logger.debug('No Update in parameters!')
+
+        if self.request.user:
+            return self.queryset.filter(owner=self.request.user)
+        else:
+            return {}
 
 
 class CatViewSet(viewsets.ModelViewSet):
@@ -83,17 +71,21 @@ class CatViewSet(viewsets.ModelViewSet):
 
 
 class FeedItemViewSet(generics.ListCreateAPIView):
+
+
     """This class handles the http GET, PUT and DELETE requests."""
-
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = FeedItem.objects.all()
     serializer_class = FeedItemSerializer
+
+
 
 
 class ItemViewSet(viewsets.ModelViewSet):
+
     queryset = FeedItem.objects.all()
     serializer_class = FeedItemSerializer
+
 
 
 
@@ -117,3 +109,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+
+######## NEW USER CREATION
+
+class UserView(viewsets.ModelViewSet):
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer2
+    model = User
+
+    def get_permissions(self):
+        # allow non-authenticated user to create via POST
+        return (AllowAny() if self.request.method == 'POST'
+                else IsStaffOrTargetUser()),

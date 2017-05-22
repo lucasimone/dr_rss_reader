@@ -16,12 +16,14 @@ class Category(models.Model):
     """
         Category model
     """
-    name = models.CharField(max_length=250, blank=True)
-    slug = models.SlugField(blank=True, null=True, editable=False)
+    name = models.CharField(max_length=250, blank=False)
+    #slug = models.SlugField(blank=True, null=True, editable=False)
     #user = models.ForeignKey(User, blank=True, null=True)
     tags = models.CharField(max_length=250, blank=True)
 
-    owner = models.ForeignKey('auth.User', related_name='category', on_delete=models.CASCADE)
+    #owner = models.ForeignKey('auth.User', related_name='category', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, null=True, blank=True)
+
 
     @property
     def get_unread_count(self):
@@ -35,6 +37,9 @@ class Category(models.Model):
         return self.name
 
 
+    class Meta:
+        ordering = ['name']
+
     def save(self, *args, **kwargs):
         """
         Updated Save to slug the name.
@@ -44,6 +49,7 @@ class Category(models.Model):
         """
 
         super(Category, self).save(*args, **kwargs)
+
 
 
 @python_2_unicode_compatible
@@ -93,6 +99,11 @@ class Feed(models.Model):
         if not self.title:
             self.title = self._get_title()
 
+        if not self.category:
+            cat = Category(name=self.title.replace(" ", "_"), tags="default", owner=self.owner)
+            cat.save()
+            self.category = cat
+
         super(Feed, self).save(*args, **kwargs)
         if self.last_update is None:
             self.update(force=True)
@@ -139,7 +150,7 @@ class Feed(models.Model):
                 elif "updated_parsed" in item:
                     pub_date = datetime.datetime.fromtimestamp(mktime(item.updated_parsed))
                 else:
-                    pub_date = datetime.datetime.now()
+                    pub_date = datetime.datetime.today()
 
                 pub_date = timezone.make_aware(pub_date, timezone.get_current_timezone())
 
@@ -149,6 +160,7 @@ class Feed(models.Model):
                                      guid=guid,
                                      pub_date=pub_date,
                                      feed=self)
+
                 feed_item.save()
         return counter
 
@@ -198,14 +210,15 @@ class FeedItem(models.Model):
     guid = models.CharField(max_length=255)
     date_fetched = models.DateField(auto_created=True, auto_now_add=True, editable=True)
     pub_date = models.DateTimeField()
+    tags = models.CharField(max_length=255, blank=True)
 
     objects = FeedItemManager()
 
     class Meta:
-        ordering = ['pub_date']
+        ordering = ['-pub_date']
 
     def __str__(self):
-        return self.title
+        return "%s - %s\n" %(self.pub_date, self.title)
 
     def mark_as_read(self):
         """

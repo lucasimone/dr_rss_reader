@@ -130,8 +130,8 @@ class FeedModelTest(TestCase):
         cat.save()
         self.assertEqual(cat.name, str(cat))
 
-    def test_category(self):
 
+    def test_category(self):
 
         cat = Category(name="CatA", owner=self.user)
         cat.save()
