@@ -8,10 +8,12 @@ import {Footer} from "../components/Footer"
 import {HeadLine} from "../components/Headline"
 
 import * as newsAction from "../actions/feedsAction"
+import Cookies from "js-cookie";
+
 
 @connect(state => ({
     user: state.user,
-    news: state.news,
+    news: state.news
 }))
 export class Home extends React.Component{
 
@@ -24,14 +26,14 @@ export class Home extends React.Component{
     componentDidMount(){
         console.log("HOME componentDidMount")
         let {dispatch, news} = this.props
-        if (!news.isLoadingRepos && news.feedItems === undefined) {
+        if (!news.isLoadingRepos && news.feed === undefined) {
               dispatch(newsAction.fetchFeedItems())
         }
 
     }
 
      componentWillReceiveProps(nextProps){
-        console.log("componentWillReceiveProps ", nextProps)
+         console.log("componentWillReceiveProps ", nextProps)
          console.log(nextProps)
     }
 
@@ -68,15 +70,17 @@ export class Home extends React.Component{
     render (){
         const user = this.props.user
 
+
+
         let {news} = this.props
         let show_news
-        if (news.isLoadingRepos || news.feedItems === undefined) {
+        if (news.isLoadingRepos || news.feed === undefined) {
             show_news = this.renderLoading()
         }
         else{
             {
-                if (news.feedItems !== undefined)
-                    show_news =  <NewsArea news={news.feedItems}/>
+                if (news.feed !== undefined)
+                    show_news =  <NewsArea news={news.feed}/>
                 else
                     show_news = "<h1> No News ... </h1>"
           }

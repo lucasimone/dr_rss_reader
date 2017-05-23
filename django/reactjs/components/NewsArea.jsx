@@ -13,7 +13,7 @@ export class NewsArea extends React.Component {
         let newsList = []
         news.results.forEach((item, index) => {
           let node = (
-            <FeedItem item={item}/>
+            <FeedItem key={index} item={item}/>
           )
           newsList.push(node)
         })

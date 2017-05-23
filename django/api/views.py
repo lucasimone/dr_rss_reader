@@ -39,23 +39,28 @@ class FeedViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        if "update" in self.request.GET :
-            logger.debug("UPDATE: %s" %self.request.GET['update'])
-            if self.request.GET['update']:
-                count = 0
-                for item in self.queryset:
-                    count += item._update_feed()
+        try:
+            if "update" in self.request.GET :
+                logger.debug("UPDATE: %s" %self.request.GET['update'])
+                if self.request.GET['update']:
+                    count = 0
+                    for item in self.queryset:
+                        count += item._update_feed()
 
-                logger.debug('Updated feeds with {num} new entries'.format(num=count))
+                    logger.debug('Updated feeds with {num} new entries'.format(num=count))
+                else:
+                    logger.debug('No Update required!')
             else:
-                logger.debug('No Update required!')
-        else:
-            logger.debug('No Update in parameters!')
+                logger.debug('No Update in parameters!')
 
-        if self.request.user:
-            return self.queryset.filter(owner=self.request.user)
-        else:
-            return {}
+            if self.request.user:
+                return self.queryset.filter(owner=self.request.user)
+            else:
+                return self.queryset
+        except Exception as ex:
+            print("THis request is not valid:")
+
+        return Fee.objects.all()
 
 
 class CatViewSet(viewsets.ModelViewSet):

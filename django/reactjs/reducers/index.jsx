@@ -12,3 +12,6 @@
 
 export { default as user } from "./authenticate"
 export { default as news } from "./fetchFeedItems"
+export { default as cats } from "./fetchCategories"
+export { default as add_rss  } from "./postFeed"
+export { default as rss }  from "./fetchFeedRss"
