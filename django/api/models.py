@@ -132,8 +132,8 @@ class Feed(models.Model):
         else:
             self.link = ""
         self.save()
-        #for item in feed.entries[:20]:
-        for item in feed.entries:
+        for item in feed.entries[:20]:
+        #for item in feed.entries:
             # The RSS spec doesn't require the guid field so fall back on link
             if "id" in item:
                 guid = item.id
