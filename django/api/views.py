@@ -60,7 +60,7 @@ class FeedViewSet(viewsets.ModelViewSet):
         except Exception as ex:
             print("THis request is not valid:")
 
-        return Fee.objects.all()
+        return Feed.objects.all()
 
 
 class CatViewSet(viewsets.ModelViewSet):

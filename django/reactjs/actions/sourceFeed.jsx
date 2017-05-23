@@ -11,7 +11,7 @@ export const FETCH_RSS_ERROR500 = "FETCH_RSS_ERROR500"
 export const FETCH_RSS_FAILURE = "FETCH_RSS_FAILURE"
 export function fetchFeedRss() {
   return function (dispatch) {
-    let url = "http://localhost:8000/api/v1/feeds?format=json"
+    let url = "http://localhost:8000/api/v1/feeds/?format=json"
     dispatch({type: FETCH_RSS})
     return request(
        url, {},

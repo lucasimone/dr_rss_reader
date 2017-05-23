@@ -19,7 +19,6 @@ import * as post from "../actions/feedPostAction"
 
 
 export const Presentation = ({ errorMessage, isCreated, ...props }) => (
-    <div className="container">
 
       <div className="col-md-6 jumbotron">
           <h3>Add RSS Feed to D+Rss Reader</h3>
@@ -51,7 +50,7 @@ export const Presentation = ({ errorMessage, isCreated, ...props }) => (
             </ButtonToolbar>
           </Form>
       </div>
-    </div>
+
 );
 
 
@@ -63,9 +62,9 @@ export class AddFeed extends React.Component {
 
 
     componentWillReceiveProps(nextProps){
-         if (nextProps.feed.isCreated){
-             alert("FEED CREATED!!!!!")
-         }
+         // if (nextProps.rss.isCreated){
+         //     alert("FEED CREATED!!!!!")
+         // }
     }
 
     constructor(props){
