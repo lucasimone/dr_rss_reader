@@ -1,9 +1,12 @@
 import React from 'react';
 import {Switch, Route} from "react-router-dom"
 
-import {Home}  from '../containers/Home';
+import {Home}  from './News';
 import {LoginForm} from '../components/LoginForm';
 import {NavBar} from '../components/NavBar';
+import {RegistrationForm} from '../components/RegistrationForm';
+import {Feeds} from './Feeds';
+
 export class Master extends React.Component {
 
     render() {
@@ -16,12 +19,12 @@ export class Master extends React.Component {
                             <Home {...props}/>
                         )}/>
 
-                        <Route path="/feed"  render= { (props) =>
-                            (<h1> Feed Area soon available! </h1>)
+                        <Route path="/feeds"  render= { (props) =>
+                            (<Feeds {...props}/>)
                         }/>
 
                         <Route path="/register"  render= { (props) =>
-                            (<h1> Registration soon available! </h1>)
+                            <RegistrationForm {...props}/>
                         }/>
 
                         <Route path="/login" render={(props) => (

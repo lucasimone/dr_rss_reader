@@ -11,9 +11,7 @@ import {
   Alert
 }
 from "react-bootstrap";
-
-
-
+import Cookies from "js-cookie";
 export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
     <div className="container">
 
@@ -73,7 +71,6 @@ export const LoginFormHtml = ({errorMessage, isLoggendIn,  ...props}) => (
 );
 
 import { connect } from "react-redux"
-
 import * as auth from "../actions/authentication"
 
 
@@ -102,13 +99,23 @@ export class LoginForm extends React.Component {
              console.log("No Profile Available")
             return
        }
-       if (up.isAuthenticated){
+
+        if (up.isAuthenticated){
+
+            Cookies.set('isAuthenticated', false)
+            Cookies.set('username', "")
+            Cookies.set('psw', "")
             up.isAuthenticated = false
             up.username = "Guest"
             let {dispatch} = this.props;
             dispatch(auth.logout());
             this.props.history.push('/');
 
+        }
+        else{
+            Cookies.set('isAuthenticated', true)
+            Cookies.set('username', this.props.username)
+            Cookies.set('psw', this.props.password)
         }
     }
 
@@ -131,8 +138,6 @@ export class LoginForm extends React.Component {
         let {dispatch} = this.props;
         dispatch(auth.login(this.state.username, this.state.password))
         this.props.history.push('/');
-
-
 
     }
 

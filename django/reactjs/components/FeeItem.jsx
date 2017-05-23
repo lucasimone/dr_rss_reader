@@ -30,7 +30,21 @@ export const FeedItem = (props) => {
     let pubDate = "   " + formatDate(item.pub_date)
     let icon_read  = "glyphicon glyphicon-eye-close"
     if (item.read) icon_read = "glyphicon glyphicon-eye-open";
+    let tags = []
+    if (item.tags) {
+        item.tags.split(" ").forEach((item, index) => {
+            item = " " + item +" "
+            let node =(
+                <div className="pull-left">
+                    <span key={index}  className="label label-primary"> # {item} </span> &nbsp; </div>
+        )
+        tags.push(node)
+        })
 
+    }
+    tags.push(<div className="pull-left"><a href="#">
+        <span key={index}  className="label label-warning"> New #TAG </span></a> &nbsp;
+    </div>)
 
 
     return (
@@ -38,6 +52,8 @@ export const FeedItem = (props) => {
                 <div className="jumbotron">
                   <h3>{item.title}</h3>
                   <p>{content}</p>
+
+
                   <p>
                       <a className="btn btn-primary pull-right" href={item.link} role="button">Read more &raquo;</a>
 
@@ -47,6 +63,8 @@ export const FeedItem = (props) => {
                       <a onClick={() => (alert("TBD"))}><span className="label label-default" ></span></a>{pubDate}
 
                   </p>
+                    <div className="row"> {tags} </div>
+
                 </div>
             </div>
 

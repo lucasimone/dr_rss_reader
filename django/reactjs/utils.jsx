@@ -2,6 +2,9 @@
  * Created by luca.lamorte on 21/05/2017.
  */
 import fetch from "isomorphic-fetch"
+import Cookies from "js-cookie";
+
+
 
 export function request(url, options, success, error400, error, failure) {
   let headers = new Headers()
@@ -22,4 +25,35 @@ export function request(url, options, success, error400, error, failure) {
         return error(res)
       }
     }).catch((ex) => { return failure(ex) })
+}
+
+
+
+export function Post(url, feedurl, title, auth, success, error400, error, failure){
+
+        var data = new FormData();
+        data.append("title",title);
+        data.append("url", feedurl);
+
+        let csrftoken = Cookies.get('csrftoken');
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+          if (this.readyState == 4){
+              const response = this.response.Text
+              if ( this.status >= 200 &&  this.status < 300) {
+                    success(response)
+              }else if (this.status === 400) {
+                    error400(response)
+              }
+              else {
+                  error(response)
+              }
+          }
+        });
+        xhr.open("POST", url);
+        xhr.setRequestHeader("authorization", auth);
+        xhr.setRequestHeader('X-CSRFToken',  csrftoken);
+        xhr.send(data);
 }
