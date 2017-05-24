@@ -41,7 +41,7 @@ export class Feeds extends React.Component {
                               <AddFeed/>
                         </div>
                     </div>
-
+                    <hr/>
                     <Footer/>
                  </div>
             );
