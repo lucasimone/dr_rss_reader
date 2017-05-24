@@ -7,8 +7,6 @@ const initialState = {
 
 export default function FeedRss(state=initialState, action={}) {
 
-  console.log("TYPE: ", action.type)
-  console.log("RSS response: ", action.res)
 
   switch (action.type) {
   case fetchFeedRss.FETCH_RSS:

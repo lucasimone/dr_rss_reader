@@ -6,7 +6,9 @@ import {LoginForm} from '../components/LoginForm';
 import {NavBar} from '../components/NavBar';
 import {RegistrationForm} from '../components/RegistrationForm';
 import {Feeds} from './Feeds';
+import {LandingPage} from '../containers/LandingPage'
 
+import Cookies from "js-cookie";
 export class Master extends React.Component {
 
     render() {
@@ -30,6 +32,10 @@ export class Master extends React.Component {
                         <Route path="/login" render={(props) => (
                             <LoginForm {...props}/>)
                          }/>
+
+                        <Route exact path="/welcome" render={ (props) => (
+                            <LandingPage {...props}/>
+                        )}/>
 
             </Switch>
             </div></div>

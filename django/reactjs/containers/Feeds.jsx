@@ -8,12 +8,29 @@ import {FeedList}       from "../components/FeedList"
 import {AddFeed}        from "../components/AddFeed"
 import * as getFeed     from "../actions/sourceFeed"
 
+import Cookies from "js-cookie";
+
 @connect(state => ({
     rss: state.rss,
-    feeds: state.feed
+    feeds: state.feed,
+    cat: state.cat
 }))
 
 export class Feeds extends React.Component {
+
+
+    componentWillMount(){
+        console.log("componentWillMount")
+
+        if (Cookies.get('isAuthenticated') === "false") {
+            console.log("REDIRECT TO WELCOME!!!!")
+            Cookies.set('isAuthenticated', "false")
+            Cookies.set('username', "")
+            Cookies.set('psw', "")
+            this.props.history.push('/welcome');
+
+        }
+    }
 
     componentDidMount(){
         console.log("FEED componentDidMount")
@@ -35,13 +52,17 @@ export class Feeds extends React.Component {
                     <div className="row">
                         <div className="col-sm-3">
 
-                           <FeedList rss={rss.rss}/>
+                            <HeadLine/>
                          </div>
-                       <div className="col-12 col-md-9">
+                       <div className="col-md-9">
                               <AddFeed/>
                         </div>
                     </div>
-                    <hr/>
+                    <div className="row">
+                        <div className="">
+                        <FeedList rss={rss.rss}/>
+                        </div>
+                    </div>
                     <Footer/>
                  </div>
             );

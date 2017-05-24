@@ -6,7 +6,7 @@ import {Sidebar} from "../components/Sidebar"
 import {NewsArea} from "../components/NewsArea"
 import {Footer} from "../components/Footer"
 import {HeadLine} from "../components/Headline"
-
+import {LandingPage} from "../containers/LandingPage"
 import * as newsAction from "../actions/feedsAction"
 import Cookies from "js-cookie";
 
@@ -21,6 +21,15 @@ export class Home extends React.Component{
 
     componentWillMount(){
         console.log("componentWillMount")
+
+        if (Cookies.get('isAuthenticated') === "false") {
+            console.log("REDIRECT TO WELCOME!!!!")
+            Cookies.set('isAuthenticated', "false")
+            Cookies.set('username', "")
+            Cookies.set('psw', "")
+            this.props.history.push('/welcome');
+
+        }
     }
 
     componentDidMount(){
@@ -44,6 +53,7 @@ export class Home extends React.Component{
 
     componentWillUpdate(nextProps, nextState){
          console.log("Compoment Will Update ", nextProps, nextState)
+
     }
 
     componentDidUpdate(nextProps, nextState){
@@ -68,8 +78,6 @@ export class Home extends React.Component{
 
 
     render (){
-        const user = this.props.user
-
 
 
         let {news} = this.props

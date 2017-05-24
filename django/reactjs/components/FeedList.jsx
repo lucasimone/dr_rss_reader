@@ -29,8 +29,13 @@ export const FeedList = (props) => {
                 <div className="media-body">
                         <h4 className="media-heading"> <strong>Title: </strong>{item.title} </h4>
                         <a href={item.url}>{item.url}</a>
+                    <p> Category: {item.category} </p>
+                        <div className="raw pull-right" >
+                            <button className="btn btn-primary"> Remove {item.title}</button>
+                        </div>
 
                 </div>
+                  <hr/>
               </div>
           )
           feedList.push(node)
@@ -41,13 +46,12 @@ export const FeedList = (props) => {
 
     return (
 
-
-
         <div className="raw">
             <div>
 
                 <div className="raw">
-                    <h4 className="text-centerr"> Connected Feeds </h4>
+                    <h4 className="text-center"> Connected Feeds </h4>
+                    <hr/>
                     {feedList}
                 </div>
 

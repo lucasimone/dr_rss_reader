@@ -20,7 +20,7 @@ import * as post from "../actions/feedPostAction"
 
 export const Presentation = ({ errorMessage, isCreated, ...props }) => (
 
-      <div className="col-md-6 jumbotron">
+      <div className="jumbotron">
           <h3>Add RSS Feed to D+Rss Reader</h3>
           <p> </p>
           <Form onSubmit={props.handleSubmit}>

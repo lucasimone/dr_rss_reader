@@ -20,8 +20,9 @@ import Cookies from "js-cookie";
 
 
 export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
-    <div className="container">
 
+    <div className="container">
+        <br/><br/><br/>
       <div className="col-md-offset-3 col-md-6 jumbotron text-center">
           <h3>D+Reader Login</h3>
           <p> </p>

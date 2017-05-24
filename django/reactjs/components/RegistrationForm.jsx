@@ -19,7 +19,7 @@ import * as auth from "../actions/authentication"
 
 export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
      <div className="container">
-        <div className="row text-center" >
+        <div className="row text-center hide" >
             <br/>
               <AlertBox msg="TEST" type ="warning" title="DEMO ...." />
             <br/>

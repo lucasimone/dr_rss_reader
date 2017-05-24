@@ -5,8 +5,10 @@ import { connect } from 'react-redux'
 import Cookies from "js-cookie";
 
 @connect(state => ({user: state.user}))
-export class NavBar extends React.Component {
 
+
+
+export class NavBar extends React.Component {
 
 
          render() {
@@ -53,21 +55,21 @@ export class NavBar extends React.Component {
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                             </button>
-                            <a className="navbar-brand" href="#">D+Rss</a>
+                            <a className="navbar-brand" href="#" style={{color: 'orange'}}>D+Rss</a>
                         </div>
 
                         <div id="navbar" className="navbar-collapse collapse">
 
                             <ul className=" nav navbar-nav">
-                                <li className="active"><Link to="/" > News </Link></li>
+                                <li><Link to="/" > News </Link></li>
                                 <li ><Link to="/feeds">Feeds</Link></li>
                                 <li><a href="api/v1/">API</a></li>
                                 <li><a href="admin/">Admin</a></li>
                             </ul>
 
-                            <ul className="nav navbar-nav navbar-right">
-                                <li><Link to="/login">
-                                    <i className="glyphicon glyphicon-user"/> {login_text}
+                            <ul className="nav navbar-nav navbar-right" >
+                                <li><Link to="/login" style={{color: 'white'}}>
+                                    <i className="glyphicon glyphicon-user" style={{color: 'orange'}} /> {login_text}
                                     </Link> </li>
                             </ul>
 
