@@ -31,13 +31,13 @@ export class Sidebar extends React.Component{
          let catList = []
          let tagList = []
          tagList.push(
-                 <a href="#" className="list-group-item text-center"># Available soon!</a>)
+                 <a href="#" key='default' className="list-group-item text-center"># Available soon!</a>)
          let count  =0
          if (cats.cats !== undefined){
              count = cats.cats.count
              cats.cats.results.forEach((item, index) => {
                  let node = (
-                 <a href="#" className="list-group-item text-center">{item.name}</a>)
+                 <a href="#" key={index} className="list-group-item text-center">{item.name}</a>)
                  catList.push(node)
              })
          }

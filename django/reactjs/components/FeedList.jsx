@@ -12,18 +12,26 @@ const extraText = () => {
 
 export const FeedList = (props) => {
 
-
+    console.log("RENDER FEED LIST WITH ", props.rss)
     let rss = props.rss
     console.log(rss)
     let feedList = []
     if (rss !== undefined){
         rss.results.forEach((item, index) => {
           let node = (
-            <div className="jumbotron">
-              <h4>{item.title}</h4>
-              <p>{item.url}</p>
 
-            </div>
+              <div className="media" key={index}>
+                <div className="media-left">
+                    <a href="#">
+                        <a href={item.url}><i className="glyphicon glyphicon-paperclip" /></a>
+                     </a>
+                 </div>
+                <div className="media-body">
+                        <h4 className="media-heading"> <strong>Title: </strong>{item.title} </h4>
+                         <a href={item.url}>{item.url}</a>
+
+                </div>
+              </div>
           )
           feedList.push(node)
         })
@@ -37,10 +45,9 @@ export const FeedList = (props) => {
 
         <div className="raw">
             <div>
-                <h3>Connected Feed </h3>
-                {extraText()}
+
                 <div className="raw">
-                    <h2 className="text-centerr">  Here will appear the RSS feed list, if I will solve ... the issue!</h2>
+                    <h4 className="text-centerr"> Connected Feeds </h4>
                     {feedList}
                 </div>
 

@@ -15,10 +15,10 @@ export function fetchFeedRss() {
     dispatch({type: FETCH_RSS})
     return request(
        url, {},
-      (json) => { dispatch({type: FETCH_RSS_SUCCESS, res: json}) },
-      (json) => { dispatch({type: FETCH_RSS_ERROR400, res: json}) },
-      (res) => { dispatch({type: FETCH_RSS_ERROR500, res: res}) },
-      (ex) => { dispatch({type: FETCH_RSS_FAILURE, error: ex}) },
+      (json) => { console.log("RSS Response...", json); dispatch({type: FETCH_RSS_SUCCESS, res: json}) },
+      (json) => { dispatch({type: FETCH_RSS_ERROR400,   res: json}) },
+      (res) => { dispatch({type: FETCH_RSS_ERROR500,    res: res}) },
+      (ex) => { dispatch({type: FETCH_RSS_FAILURE,      error: ex}) },
     )
   }
 }

@@ -1,14 +1,18 @@
 import React from "react";
 
 
-import { connect } from 'react-redux'
-import {Footer} from "../components/Footer"
-import {HeadLine} from "../components/Headline"
-import {FeedList} from "../components/FeedList"
-import {AddFeed} from "../components/AddFeed"
-import * as getFeed from "../actions/sourceFeed"
+import { connect }      from 'react-redux'
+import {Footer}         from "../components/Footer"
+import {HeadLine}       from "../components/Headline"
+import {FeedList}       from "../components/FeedList"
+import {AddFeed}        from "../components/AddFeed"
+import * as getFeed     from "../actions/sourceFeed"
 
-@connect(state => ({rss: state.rss}))
+@connect(state => ({
+    rss: state.rss,
+    feeds: state.feed
+}))
+
 export class Feeds extends React.Component {
 
     componentDidMount(){
@@ -22,24 +26,22 @@ export class Feeds extends React.Component {
 
     render() {
 
-             let { rss } = this.props
+            console.log("UPDATING RENDER OF FEES")
+            console.log("RSS", this.props.rss)
+            let { rss } = this.props
             return (
                 <div className="container">
 
                     <div className="row">
                         <div className="col-sm-3">
-                            <br/><br/>
-                           <HeadLine/>
+
+                           <FeedList rss={rss.rss}/>
                          </div>
                        <div className="col-12 col-md-9">
                               <AddFeed/>
                         </div>
                     </div>
-                    <hr/>
-                    <div className="row">
-                        <FeedList rss={rss.rss}/>
-                    </div>
-                    <hr/>
+
                     <Footer/>
                  </div>
             );

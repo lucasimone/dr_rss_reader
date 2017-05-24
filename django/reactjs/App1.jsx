@@ -26,15 +26,15 @@ let store = finalCreateStore(reducer)
 //let store = createStore(reducers)
 
 store.subscribe(() => {
+
     console.log("Store updated", store.getState())
+
 })
 
 export class RssFeedMainPage extends React.Component {
 
 
     render() {
-console.log("STORE STATE:::::")
-console.log(store.getState())
     return (
 
             <Router>

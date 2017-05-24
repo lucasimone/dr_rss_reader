@@ -34,16 +34,18 @@ export const FeedItem = (props) => {
     if (item.tags) {
         item.tags.split(" ").forEach((item, index) => {
             item = " " + item +" "
+            let unique_id = item + "_" + index
             let node =(
                 <div className="pull-left">
-                    <span key={index}  className="label label-primary"> # {item} </span> &nbsp; </div>
+                    <span key={unique_id}  className="label label-primary"> # {item} </span> &nbsp; </div>
         )
         tags.push(node)
         })
 
     }
-    tags.push(<div className="pull-left"><a href="#">
-        <span key={index}  className="label label-warning"> New #TAG </span></a> &nbsp;
+    let def = "default_" + item.id
+    tags.push(<div key={def} className="pull-left"><a href="#">
+        <span   className="label label-warning"> New #TAG </span></a> &nbsp;
     </div>)
 
 

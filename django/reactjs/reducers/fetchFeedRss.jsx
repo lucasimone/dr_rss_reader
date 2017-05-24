@@ -1,19 +1,24 @@
-import * as feedItemsActions from "../actions/feedsAction"
+import * as fetchFeedRss from "../actions/sourceFeed"
 
 const initialState = {
   isLoadingRepos: false,
-  rss: undefined,
+  rss: undefined
 }
 
 export default function FeedRss(state=initialState, action={}) {
+
+  console.log("TYPE: ", action.type)
+  console.log("RSS response: ", action.res)
+
   switch (action.type) {
-  case feedItemsActions.FETCH_REPOS:
+  case fetchFeedRss.FETCH_RSS:
     return {...state, isLoadingRepos: true}
-  case feedItemsActions.FETCH_REPOS_SUCCESS:
-    return {...state, isLoadingRepos: false, rss: action.res}
-  case feedItemsActions.FETCH_REPOS_ERROR400:
-  case feedItemsActions.FETCH_REPOS_ERROR500:
-  case feedItemsActions.FETCH_REPOS_FAILURE:
+  case fetchFeedRss.FETCH_RSS_SUCCESS: {
+      return {...state, isLoadingRepos: false, rss: action.res}
+  }
+  case fetchFeedRss.FETCH_RSS_ERROR400:
+  case fetchFeedRss.FETCH_RSS_ERROR500:
+  case fetchFeedRss.FETCH_RSS_FAILURE:
     return {...state, isLoadingRepos: false}
   default:
     return state
