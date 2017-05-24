@@ -22,13 +22,13 @@ export const FeedList = (props) => {
 
               <div className="media" key={index}>
                 <div className="media-left">
-                    <a href="#">
-                        <a href={item.url}><i className="glyphicon glyphicon-paperclip" /></a>
+                    <a href={item.url}>
+                        <i className="glyphicon glyphicon-paperclip" />
                      </a>
                  </div>
                 <div className="media-body">
                         <h4 className="media-heading"> <strong>Title: </strong>{item.title} </h4>
-                         <a href={item.url}>{item.url}</a>
+                        <a href={item.url}>{item.url}</a>
 
                 </div>
               </div>

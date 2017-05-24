@@ -10,20 +10,35 @@ export class NavBar extends React.Component {
 
 
          render() {
-            console.log("Render NavBar")
-            console.log(this.props.user)
-            let login_text = "Login"
-            let authenticated = Cookies.get('isAuthenticated')
-            if (this.props.user.isAuthenticated) {
-           /// if (authenticated) {
-                   // Cookies.set('username', this.props.user.username);
-                   // Cookies.set('password', this.props.user.password);
-                   // Cookies.set('loggedin', this.props.user.isAuthenticated);
-                   //let username = Cookies.get('username')
-                   login_text = " Logout " + this.props.user.username.toUpperCase()
-                //login_text = " Logout " + username.toUpperCase()
 
+            let login_text = "Login"
+            let cookieauth = Cookies.get('isAuthenticated')
+            console.log("USER IS AUTHENTICATED????" + cookieauth)
+            //if (this.props.user.isAuthenticated) {
+            //   login_text = " Logout " + this.props.user.username.toUpperCase()
+            //}
+            //     if (authenticated) {
+            //         // Cookies.set('username', this.props.user.username);
+            //         // Cookies.set('password', this.props.user.password);
+            //         // Cookies.set('loggedin', this.props.user.isAuthenticated);
+            //         //let username = Cookies.get('username')
+
+            //         //login_text = " Logout " + username.toUpperCase()
+            //
+            //     }
+            // }
+            //  if (authenticated)
+            //     login_text = " Logout " + Cookies.get('username').toUpperCase()
+            // else {
+
+            if (cookieauth === "true"){
+                if (Cookies.get('username') !== undefined && Cookies.get('username') !== "undefined" )
+                    login_text = " Logout " +  Cookies.get('username').toUpperCase()
             }
+
+            // }
+
+
 
             // if (this.props.userProfile.isAuthenticated)
             //         username = this.props.userProfile.username

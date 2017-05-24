@@ -11,7 +11,14 @@ import {
   Alert
 }
 from "react-bootstrap";
+
+
+import { connect } from "react-redux"
+import * as auth from "../actions/authentication"
+
 import Cookies from "js-cookie";
+
+
 export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
     <div className="container">
 
@@ -48,42 +55,19 @@ export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
 );
 
 
-export const LoginFormHtml = ({errorMessage, isLoggendIn,  ...props}) => (
-  <div className="container">
-    <div className="row">
-        <div className="col-md-offset-5 col-md-3">
-            <div className="form-login">
-            <h>Welcome back.</h>
-            <input type="text" id="userName" className="form-control input-sm chat-input" placeholder="username" />
-            <br/>
-            <input type="text" id="userPassword" className="form-control input-sm chat-input" placeholder="password" />
-            <br/>
-            <div className="wrapper">
-            <span className="group-btn">
-                <a href="#" className="btn btn-primary btn-md">login <i className="fa fa-sign-in"/></a>
-            </span>
-            </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-);
-
-import { connect } from "react-redux"
-import * as auth from "../actions/authentication"
 
 
 @connect(state => ({ user: state.user }))
 export class LoginForm extends React.Component {
 
-    constructor(props){
+    constructor(){
         super();
 
         this.state = {
                 username : "Guest",
                 password : "",
-                isAuthenticated: false
+                isAuthenticated: "false"
         };
     }
 
@@ -91,32 +75,21 @@ export class LoginForm extends React.Component {
 
 
     componentWillUpdate(nextProps, nextState){
-         console.log("LoginForm Will Update ", nextProps, nextState)
 
-       let up = nextProps.user
-        console.log(up)
-       if (up === "undefined"){
-             console.log("No Profile Available")
-            return
-       }
+       console.log(" LOGIN WILL UPDATE......")
 
-        if (up.isAuthenticated){
 
-            Cookies.set('isAuthenticated', false)
+       if (Cookies.get('isAuthenticated') === "true") {
+            console.log(">>>>>>>>>>>>>>>>LOGOUT>>>>>>>>>>>>>")
+            Cookies.set('isAuthenticated', "false")
             Cookies.set('username', "")
             Cookies.set('psw', "")
-            up.isAuthenticated = false
-            up.username = "Guest"
             let {dispatch} = this.props;
             dispatch(auth.logout());
             this.props.history.push('/');
 
         }
-        else{
-            Cookies.set('isAuthenticated', true)
-            Cookies.set('username', this.props.username)
-            Cookies.set('psw', this.props.password)
-        }
+
     }
 
 
@@ -134,6 +107,11 @@ export class LoginForm extends React.Component {
         e.preventDefault();
         this.setState({ isAuthenticated: true});
 
+        Cookies.set('isAuthenticated', "true")
+        Cookies.set('username', this.state.username)
+        Cookies.set('psw', this.state.password)
+
+
         // SEND TO NAVBAR ...
         let {dispatch} = this.props;
         dispatch(auth.login(this.state.username, this.state.password))
@@ -142,6 +120,8 @@ export class LoginForm extends React.Component {
     }
 
     render() {
+
+
 
         return (
            <Presentation
