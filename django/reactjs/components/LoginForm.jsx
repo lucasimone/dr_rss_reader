@@ -78,7 +78,7 @@ export class LoginForm extends React.Component {
 
        console.log(" LOGIN WILL UPDATE......")
 
-
+        // TODO: better use this https://stackoverflow.com/questions/38397653/redux-what-is-the-correct-place-to-save-cookie-after-login-request
        if (Cookies.get('isAuthenticated') === "true") {
             console.log(">>>>>>>>>>>>>>>>LOGOUT>>>>>>>>>>>>>")
             Cookies.set('isAuthenticated', "false")
