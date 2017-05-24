@@ -16,8 +16,8 @@ import {AlertBox} from "./AlertBox"
 import { connect } from "react-redux"
 import * as auth from "../actions/authentication"
 
+export const Presentation = ({ infoMessage, errorMessage, isLoggingIn, ...props }) => (
 
-export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
      <div className="container">
         <div className="row text-center hide" >
             <br/>
@@ -33,6 +33,7 @@ export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
           </p>
           <Form onSubmit={props.handleSubmit}>
             {errorMessage && <Alert bsStyle="danger">{errorMessage}</Alert>}
+            {infoMessage && <Alert bsStyle="info">{infoMessage}</Alert>}
             <FormGroup>
               <FormControl
                 type="text"
@@ -52,13 +53,16 @@ export const Presentation = ({ errorMessage, isLoggingIn, ...props }) => (
             <div className="raw">
                 <div className="col-lg-offset-4">
                     <ButtonToolbar>
-                      <Button type="submit" bsStyle="primary">
-                         Create
+                      <Button type="submit"
+                              bsStyle="primary"
+                              disabled={isLoggingIn}
+                              onClick={!isLoggingIn ? props.handleSubmit : null}>
+                                {isLoggingIn ? 'Please Wait...' : 'Create User'}
+
                       </Button>
 
                       <Link className="btn btn-link" to="/login">Login</Link>
                     </ButtonToolbar>
-
                 </div>
             </div>
 
@@ -86,7 +90,6 @@ function createUser(username, password, handler){
         xhr.addEventListener("readystatechange", function () {
           if (this.readyState === 4) {
             console.log("FEED CREATO? "+this.responseText);
-            alert("Utente Creato"+this.responseText)
           }
         });
 
@@ -99,7 +102,7 @@ function createUser(username, password, handler){
 @connect(state => ({ user: state.user }))
 export class RegistrationForm extends React.Component {
 
-    constructor(props){
+    constructor(){
         super();
 
         this.state = {
@@ -112,8 +115,13 @@ export class RegistrationForm extends React.Component {
 
     handleRegistration(){
         if (this.readyState === 4) {
-            console.log("FEED CREATO? "+this.responseText);
-            alert("OK with this result:" + this.responseText)
+            console.log("USER CREATED!", this.responseText)
+            setTimeout(() => { this.setState( {infoMessage : "User Created! Login ..." }) } , 2000)
+            setTimeout(() => { this.redirectHome() } , 2000)
+        }
+        else {
+            this.setState( {errorMessage : this.responseText })
+            setTimeout(() => { this.setState( {errorMessage : undefined }) } , 5000)
         }
     }
 
@@ -125,7 +133,7 @@ export class RegistrationForm extends React.Component {
         this.setState({ password: e.target.value});
     }
 
-    handleSubmit(e) {
+    handleSubmit_ORI(e) {
 
         e.preventDefault();
         this.setState({ isAuthenticated: true});
@@ -141,10 +149,49 @@ export class RegistrationForm extends React.Component {
 
     }
 
+    handleSubmit(e) {
+
+        e.preventDefault();
+
+        const username = this.state.username
+        const password = this.state.password
+
+        if (username  && password){
+            this.setState( {isLoggingIn : true })
+            setTimeout(() => { this.setState( {infoMessage : "User Created! Login ..." }) } , 2000)
+            setTimeout(() => { this.redirectHome() } , 2000)
+        }
+        else {
+
+            createUser(username, password, this.handleRegistration.bind(this))
+            // this.setState( {errorMessage : "Please insert both username and password!" })
+            // setTimeout(() => { this.setState( {errorMessage : undefined }) } , 5000)
+        }
+
+    }
+
+    redirectHome(){
+
+        const username = this.state.username
+        const password = this.state.password
+
+        createUser(username, password, this.handleRegistration.bind(this))
+
+        let {dispatch} = this.props;
+        dispatch(auth.login(username, password))
+        Cookies.set('isAuthenticated', "true")
+        Cookies.set('username', username)
+        Cookies.set('psw', password)
+        this.props.history.push('/');
+    }
+
     render() {
+
+
 
         return (
            <Presentation
+            infoMessage={this.state.infoMessage}
             errorMessage={this.state.errorMessage}
             isLoggingIn={this.state.isLoggingIn}
             handleSubmit={this.handleSubmit.bind(this)}
