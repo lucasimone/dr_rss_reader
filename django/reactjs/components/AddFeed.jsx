@@ -18,13 +18,14 @@ import Cookies from "js-cookie";
 import * as post from "../actions/feedPostAction"
 
 
-export const Presentation = ({ errorMessage, isCreated, ...props }) => (
+export const Presentation = ({ infoMessage, errorMessage, isCreated, ...props }) => (
 
       <div className="jumbotron">
           <h3>Add RSS Feed to D+Rss Reader</h3>
           <p> </p>
           <Form onSubmit={props.handleSubmit}>
             {errorMessage && <Alert bsStyle="danger">{errorMessage}</Alert>}
+             {infoMessage && <Alert bsStyle="info">{infoMessage}</Alert>}
             <FormGroup>
               <FormControl
                 type="text"
@@ -61,10 +62,21 @@ export const Presentation = ({ errorMessage, isCreated, ...props }) => (
 export class AddFeed extends React.Component {
 
 
-    componentWillReceiveProps(nextProps){
-         // if (nextProps.rss.isCreated){
-         //     alert("FEED CREATED!!!!!")
-         // }
+   componentWillUpdate(nextProps, nextState){
+         console.log("Add FEED Will Update ", nextProps, nextState)
+
+         if (nextProps.error_post_feed !== undefined){
+            this.setState({errorMessage: "This feed already exists in your profile!"})
+            setTimeout(() => { this.setState({errorMessage: undefined}) } , 5000)
+         }
+         if (nextProps.feed_isCreated !== undefined){
+             if (nextProps.feed_isCreated !== true) {
+                 this.setState({infoMessage: "Feed Created"})
+                 setTimeout(() => {
+                     this.setState({infoMessage: undefined})
+                 }, 5000)
+             }
+         }
     }
 
     constructor(props){
@@ -100,14 +112,30 @@ export class AddFeed extends React.Component {
         return "Basic " + hash;
     }
 
+
+    isURL(str) {
+      var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+      if(!regex .test(str)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
     handleSubmit(e) {
 
         e.preventDefault();
         const url = this.state.url
         const title = this.state.title
 
-        if (url === "" || title ===""){
+        if (url === "" || title === "" ){
             this.setState({errorMessage: "Please fill the form completely"})
+            setTimeout(() => { this.setState({errorMessage: undefined}) } , 5000)
+            return
+        }
+        else if (!this.isURL(url)){
+            this.setState({errorMessage: "Please enter a valid URL"})
+            setTimeout(() => { this.setState({errorMessage: undefined}) } , 5000)
             return
         }
 
@@ -115,16 +143,17 @@ export class AddFeed extends React.Component {
 
         const username = this.props.user.username
         const psw = this.props.user.pws
-
-        if (!this.props.user.isAuthenticated){
-            this.setState({errorMessage: "Please Login"})
-            return
-        }
         const auth = this.getAuthUser(username, psw)
 
 
         let {dispatch} = this.props
-         dispatch(post.postFeed(auth, url, title))
+        try {
+            dispatch(post.postFeed(auth, url, title))
+            setTimeout(() => { this.setState({infoMessage: "Created "+title}) } , 1000)
+        }catch(err){
+            this.setState({errorMessage: "This feed already exists in your profile!"})
+            setTimeout(() => { this.setState({errorMessage: undefined}) } , 5000)
+        }
 
     }
 
@@ -136,6 +165,7 @@ export class AddFeed extends React.Component {
             console.log(this.props.feed)
         return (
            <Presentation
+            infoMessage={this.state.infoMessage}
             errorMessage={this.state.errorMessage}
             isCreated={this.state.isCreated}
             handleSubmit={this.handleSubmit.bind(this)}

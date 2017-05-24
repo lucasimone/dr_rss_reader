@@ -41,9 +41,10 @@ export function Post(url, feedurl, title, auth, success, error400, error, failur
 
         xhr.addEventListener("readystatechange", function () {
           if (this.readyState == 4){
-              const response = this.response.Text
+              console.log("STATUS:"+ this.status)
+              const response = this.responseText
               if ( this.status >= 200 &&  this.status < 300) {
-                    success(response)
+                    success(this.responseText)
               }else if (this.status === 400) {
                     error400(response)
               }
@@ -55,5 +56,9 @@ export function Post(url, feedurl, title, auth, success, error400, error, failur
         xhr.open("POST", url);
         xhr.setRequestHeader("authorization", auth);
         xhr.setRequestHeader('X-CSRFToken',  csrftoken);
-        xhr.send(data);
+        try {
+            xhr.send(data);
+        } catch(err) {
+            failure(err);
+        }
 }

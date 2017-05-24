@@ -75,7 +75,13 @@ export const Presentation = ({ infoMessage, errorMessage, isLoggingIn, ...props 
 /// TODO: This should be integrated with login in  a more simple and effinent way!
 
 import Cookies from "js-cookie";
-function createUser(username, password, handler){
+
+
+@connect(state => ({ user: state.user }))
+export class RegistrationForm extends React.Component {
+
+
+    createUser(username, password){
 
         var data = new FormData();
         var csrftoken = Cookies.get('csrftoken');
@@ -86,11 +92,11 @@ function createUser(username, password, handler){
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
 
+        let callback = this.handleRegistration.bind(this)
         //xhr.addEventListener("readystatechange",  handler)
         xhr.addEventListener("readystatechange", function () {
-          if (this.readyState === 4) {
-            console.log("FEED CREATO? "+this.responseText);
-          }
+           callback(this.readyState, this.responseText)
+
         });
 
         xhr.open("POST", "http://localhost:8000/api/v1/account/");
@@ -98,9 +104,6 @@ function createUser(username, password, handler){
         xhr.setRequestHeader('X-CSRFToken',  csrftoken);
         xhr.send(data);
     }
-
-@connect(state => ({ user: state.user }))
-export class RegistrationForm extends React.Component {
 
     constructor(){
         super();
@@ -113,14 +116,14 @@ export class RegistrationForm extends React.Component {
     }
 
 
-    handleRegistration(){
-        if (this.readyState === 4) {
-            console.log("USER CREATED!", this.responseText)
-            setTimeout(() => { this.setState( {infoMessage : "User Created! Login ..." }) } , 2000)
+    handleRegistration(readyState, response){
+        if (readyState === 4) {
+            console.log("USER CREATED!", response)
+            setTimeout(() => { this.setState( {infoMessage : "Please w" }) } , 2000)
             setTimeout(() => { this.redirectHome() } , 2000)
         }
         else {
-            this.setState( {errorMessage : this.responseText })
+            this.setState( {errorMessage : response })
             setTimeout(() => { this.setState( {errorMessage : undefined }) } , 5000)
         }
     }
@@ -140,7 +143,7 @@ export class RegistrationForm extends React.Component {
 
         const username = this.state.username
         const password = this.state.password
-        createUser(username, password, this.handleRegistration.bind(this))
+        this.createUser(username, password, this.handleRegistration.bind(this))
         // // SEND TO NAVBAR ...
 
         let {dispatch} = this.props;
@@ -156,16 +159,14 @@ export class RegistrationForm extends React.Component {
         const username = this.state.username
         const password = this.state.password
 
-        if (username  && password){
+        if (username !== ""  && password !== ""){
             this.setState( {isLoggingIn : true })
-            setTimeout(() => { this.setState( {infoMessage : "User Created! Login ..." }) } , 2000)
-            setTimeout(() => { this.redirectHome() } , 2000)
+            this.createUser(username, password)
+
         }
         else {
-
-            createUser(username, password, this.handleRegistration.bind(this))
-            // this.setState( {errorMessage : "Please insert both username and password!" })
-            // setTimeout(() => { this.setState( {errorMessage : undefined }) } , 5000)
+            this.setState( {errorMessage : "Please insert both username and password!" })
+            setTimeout(() => { this.setState( {errorMessage : undefined }) } , 5000)
         }
 
     }
@@ -174,8 +175,6 @@ export class RegistrationForm extends React.Component {
 
         const username = this.state.username
         const password = this.state.password
-
-        createUser(username, password, this.handleRegistration.bind(this))
 
         let {dispatch} = this.props;
         dispatch(auth.login(username, password))

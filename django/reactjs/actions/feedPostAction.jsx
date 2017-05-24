@@ -21,7 +21,7 @@ export function postFeed(basicAuth, feed_url, title) {
       (json) => { dispatch({type: POST_FEED_SUCCESS, res: json}) },
       (json) => { dispatch({type: POST_FEED_ERROR400, res: json}) },
       (res) => { dispatch({type: POST_FEED_ERROR500, res: res}) },
-      (ex) => { dispatch({type: POST_FEED_FAILURE, error: ex}) },
+      (ex) => { dispatch({type: POST_FEED_FAILURE, res: ex}) },
     )
   }
 }
